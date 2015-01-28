@@ -27,13 +27,13 @@
 
 # Installs dependencies into the current virtual environment.
 # E.g.,
-#    install_deps $DIR
+#    install_python_deps $DIR
 # Installs all dependencies listed in deps.req and deps.opt files.
 function install_python_deps {
     assert_env PYTHON_REQ_DEPS || exit 1
     assert_env PYTHON_OPT_DEPS || exit 1
     if [ -z "${ENV}" ]; then
-        echo "install_deps: called without ENV" >&2
+        echo "install_python_deps: called without ENV" >&2
         return 1
     fi
     . "${ENV}"/bin/activate
@@ -73,12 +73,12 @@ function install_python_deps {
 
 # Determines whether the virtual environment $ENV needs updating.
 # E.g.,
-#    if $(env_needs_update); then
+#    if $(python_env_needs_update); then
 #        # update it
 #    fi
 function python_env_needs_update {
     if [ -z "${ENV}" ]; then
-        echo "env_needs_update: called without ENV" >&2
+        echo "python_env_needs_update: called without ENV" >&2
         return 1
     fi
     # ENV directory doesn't exist?
@@ -97,7 +97,7 @@ function python_env_needs_update {
 # have been installed.
 function complete_python_env {
     if [ -z "${ENV}" ]; then
-        echo "complete_env: called without ENV" >&2
+        echo "complete_python_env: called without ENV" >&2
         return 1
     fi
     date > "${ENV}"/.ts
@@ -109,19 +109,19 @@ function complete_python_env {
 # the value will be passed to virtualenv when creating the environment.
 function create_python_env {
     if [ -z "$ENV" ]; then
-        echo "create_env: called without ENV" >&2
+        echo "create_python_env: called without ENV" >&2
         return 1
     fi
     if [ -z "$VIRTUALENV" ]; then
-        echo "create_env: called without VIRTUALENV" >&2
+        echo "create_python_env: called without VIRTUALENV" >&2
         return 1
     fi
     if [ $# -ne 1 ]; then
-        echo "create_env: called without \$1" >&2
+        echo "create_python_env: called without \$1" >&2
         return 1
     fi
     local INTERP="$1"
-    if env_needs_update; then
+    if python_env_needs_update; then
         echo "Python virtual environment out-of-date - it will be created."
         echo "(${ENV})"
         rm -fr "${ENV}"
@@ -129,8 +129,8 @@ function create_python_env {
         local ARGS="${ENV} --prompt=${PROMPT}"
         # shellcheck disable=SC2086
         $INTERP "$VIRTUALENV" $ARGS || exit 1
-        install_deps || exit 1
-        complete_env || exit 1
+        install_python_deps || exit 1
+        complete_python_env || exit 1
         echo
     fi
 }
