@@ -7,6 +7,8 @@ A collection of scripts for `the go shell`_.
 
 **This is free software with ABSOLUTELY NO WARRANTY.**
 
+[![Build Status](https://travis-ci.org/formwork-io/gosh-contrib.svg)](https://travis-ci.org/formwork-io/gosh-contrib)
+
 .. contents::
 
 
