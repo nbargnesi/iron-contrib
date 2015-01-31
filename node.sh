@@ -39,6 +39,7 @@
 #    install_node_deps
 # Runs npm install in the current directory.
 function install_node_deps {
+    require_cmd "npm" || return 1
     echo -en "Running npm install... "
     # redirect stdout/stderr to mimic silent behavior
     # (npm currently lacks this functionality as of 2014-10-20)
