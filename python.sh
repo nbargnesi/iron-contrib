@@ -113,8 +113,8 @@ function complete_python_env {
 # is set, it the value will be passed to virtualenv when creating the
 # environment.
 function create_python_env {
-    assert_env GOSH_CONTRIB_PYTHON_VENV
-    assert_env GOSH_CONTRIB_PYTHON_VIRTUALENV
+    assert_env GOSH_CONTRIB_PYTHON_VENV || exit 1
+    assert_env GOSH_CONTRIB_PYTHON_VIRTUALENV || exit 1
     if [ $# -ne 1 ]; then
         echo "create_python_env: called without \$1" >&2
         exit 1
