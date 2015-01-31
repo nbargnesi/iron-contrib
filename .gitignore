@@ -1,0 +1,7 @@
+npm-debug.log
+
+# ignore the go shell
+/go.sh
+/.gosh.sh
+/env.sh
+scripts/go.sh
