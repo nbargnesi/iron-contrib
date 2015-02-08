@@ -16,12 +16,34 @@ A collection of scripts for `the go shell`_.
 Python
 ------
 
-create_env
-++++++++++
+create_python_env
++++++++++++++++++
 
 Node
 ----
 
 create_node_env
 +++++++++++++++
+
+Creates ``node_modules`` from ``package.json`` and adds its ``bin`` directory
+to the ``PATH``.
+
+.. code:: bash
+
+    test
+
+Ruby
+----
+
+create_gem_path
++++++++++++++++
+
+Headless
+--------
+
+start_headless
+++++++++++++++
+
+stop_headless
++++++++++++++
 
