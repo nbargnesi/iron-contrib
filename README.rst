@@ -39,8 +39,8 @@ to the ``PATH``.
 
 .. code:: bash
 
-    default GOSH_CONTRIB_NODE_NPM_PKGJSON /path/nodeenv1/package.json
-    default GOSH_CONTRIB_NODE_NPM_MODPATH /path/nodeenv1
+    default GOSH_CONTRIB_NODE_NPM_PKGJSON "/path/nodeenv1/package.json"
+    default GOSH_CONTRIB_NODE_NPM_MODPATH "/path/nodeenv1"
     create_node_env
 
 Ruby
@@ -53,7 +53,7 @@ Creates a gem path from a Gemfile and adds its ``bin`` directory to the
 
 .. code:: bash
 
-    assert_env GOSH_CONTRIB_RUBY_GEMPATH || exit 1
-    assert_env GOSH_CONTRIB_RUBY_GEMFILE || exit 1
+    default GOSH_CONTRIB_RUBY_GEMPATH "/path/to/gems"
+    default GOSH_CONTRIB_RUBY_GEMFILE "/path/to/Gemfile"
     create_gem_path
 
