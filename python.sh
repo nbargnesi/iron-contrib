@@ -132,4 +132,7 @@ function create_python_env {
         complete_python_env || exit 1
         echo
     fi
+
+    . "$GOSH_CONTRIB_PYTHON_VENV"/bin/activate
 }
+
