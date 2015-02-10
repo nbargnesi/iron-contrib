@@ -107,7 +107,7 @@ function create_node_env {
         echo
     fi
 
-    local node_binpath="$GOSH_CONTRIB_NODE_NPM_MODPATH/node_modules/.bin"
-    _g_add_path "$node_binpath"
+    local binpath="$GOSH_CONTRIB_NODE_NPM_MODPATH/node_modules/.bin"
+    _g_add_path "$binpath"
 }
 

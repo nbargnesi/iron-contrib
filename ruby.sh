@@ -121,6 +121,6 @@ function create_gem_path {
         echo
     fi
 
-    local gem_binpath="$GOSH_CONTRIB_RUBY_GEMPATH/bin":$PATH
-    _g_add_path "$gem_binpath"
+    local binpath="$GOSH_CONTRIB_RUBY_GEMPATH/bin":$PATH
+    _g_add_path "$binpath"
 }
