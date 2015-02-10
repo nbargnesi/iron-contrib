@@ -57,3 +57,11 @@ Creates a gem path from a Gemfile and adds its ``bin`` directory to the
     default GOSH_CONTRIB_RUBY_GEMFILE "/path/to/Gemfile"
     create_gem_path
 
+ESLint
+------
+
+create_eslint_env
++++++++++++++++++
+
+TODO
+
