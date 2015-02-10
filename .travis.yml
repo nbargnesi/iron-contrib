@@ -1,4 +1,4 @@
 language: bash
 
 script:
-    - bash tests/all.sh
+    - bash tests/all.sh --update-gosh
