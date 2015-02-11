@@ -43,10 +43,17 @@ function bundle_install_gems {
     assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 1
     vdefault BUNDLE_OPTS "--quiet"
     echo -en "Running bundle install... "
+    local bundler="$GOSH_CONTRIB_RUBY_GEMPATH"/bin/bundler
+    if [ ! -x "$bundler" ]; then
+        echo "failed"
+        echo "$bundler: command not found" >&2
+        return 1
+    fi
     # shellcheck disable=SC2086
     if ! bundle install $BUNDLE_OPTS \
                 --gemfile="$GOSH_CONTRIB_RUBY_GEMFILE" \
-                --path="$GOSH_CONTRIB_RUBY_GEMPATH"; then
+                --path="$GOSH_CONTRIB_RUBY_GEMPATH" \
+                --binstubs="$GOSH_CONTRIB_RUBY_GEMPATH"/bin; then
         echo "failed"
         return 1
     fi
