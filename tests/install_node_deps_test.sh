@@ -15,8 +15,8 @@ testInstallNodeDepsFailure() {
 
 testMissingNodeEnv() {
     # missing MODPATH
-    GOSH_CONTRIB_NODE_NPM_MODPATH="fake-environment"
-    GOSH_CONTRIB_NODE_NPM_PKGJSON="ignored"
+    IRON_CONTRIB_NODE_NPM_MODPATH="fake-environment"
+    IRON_CONTRIB_NODE_NPM_PKGJSON="ignored"
     node_env_needs_update
     RET=$?
     # assert returned 0 (indicating an update is needed)
@@ -25,15 +25,15 @@ testMissingNodeEnv() {
 
 testPackageJSONChanged() {
     # PKGJSON newer than MODPATH
-    GOSH_CONTRIB_NODE_NPM_MODPATH="$(mktemp -d)"
-    mkdir "$GOSH_CONTRIB_NODE_NPM_MODPATH"/node_modules
-    touch -d "19700101" $GOSH_CONTRIB_NODE_NPM_MODPATH
-    GOSH_CONTRIB_NODE_NPM_PKGJSON="$(mktemp)"
+    IRON_CONTRIB_NODE_NPM_MODPATH="$(mktemp -d)"
+    mkdir "$IRON_CONTRIB_NODE_NPM_MODPATH"/node_modules
+    touch -d "19700101" $IRON_CONTRIB_NODE_NPM_MODPATH
+    IRON_CONTRIB_NODE_NPM_PKGJSON="$(mktemp)"
     node_env_needs_update
     RET=$?
 
-    rm -fr "$GOSH_CONTRIB_NODE_NPM_MODPATH"
-    rm "$GOSH_CONTRIB_NODE_NPM_PKGJSON"
+    rm -fr "$IRON_CONTRIB_NODE_NPM_MODPATH"
+    rm "$IRON_CONTRIB_NODE_NPM_PKGJSON"
 
     # assert returned 0 (indicating an update is needed)
     assertEquals 0 $RET
@@ -41,15 +41,15 @@ testPackageJSONChanged() {
 
 testCreationFailed() {
     # no ".ts" file exists in MODPATH
-    GOSH_CONTRIB_NODE_NPM_PKGJSON="$(mktemp)"
-    touch -d "19700101" $GOSH_CONTRIB_NODE_NPM_PKGJSON
-    GOSH_CONTRIB_NODE_NPM_MODPATH="$(mktemp -d)"
-    mkdir "$GOSH_CONTRIB_NODE_NPM_MODPATH"/node_modules
+    IRON_CONTRIB_NODE_NPM_PKGJSON="$(mktemp)"
+    touch -d "19700101" $IRON_CONTRIB_NODE_NPM_PKGJSON
+    IRON_CONTRIB_NODE_NPM_MODPATH="$(mktemp -d)"
+    mkdir "$IRON_CONTRIB_NODE_NPM_MODPATH"/node_modules
     node_env_needs_update
     RET=$?
 
-    rm -fr "$GOSH_CONTRIB_NODE_NPM_MODPATH"
-    rm "$GOSH_CONTRIB_NODE_NPM_PKGJSON"
+    rm -fr "$IRON_CONTRIB_NODE_NPM_MODPATH"
+    rm "$IRON_CONTRIB_NODE_NPM_PKGJSON"
 
     # assert returned 0 (indicating an update is needed)
     assertEquals 0 $RET

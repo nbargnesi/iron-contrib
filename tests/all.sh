@@ -3,24 +3,24 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export TOP_DIR="$dir"/../
 cd "$dir" || exit 1
 
-_getopt=$(getopt -o U --long update-gosh -- "$@") || exit 1
-update_gosh="no"
+_getopt=$(getopt -o U --long update-iron -- "$@") || exit 1
+update_iron="no"
 while [ $# -gt 0 ]; do
     case "$1" in
         "-U")
             ;&
-        "--update-gosh")
-            update_gosh="yes"
+        "--update-iron")
+            update_iron="yes"
             ;;&
     esac
     shift
 done
 
-if [ ! -r "$TOP_DIR"/.gosh.sh -o "$update_gosh" == "yes" ]; then
-    echo -n "Updating formwork-io/gosh... "
-    # Install the latest go shell
+if [ ! -r "$TOP_DIR"/.iron.sh -o "$update_iron" == "yes" ]; then
+    echo -n "Updating formwork-io/iron... "
+    # Install the latest Iron
     cd ..
-    url="https://raw.githubusercontent.com/formwork-io/gosh/latest/overlay.sh"
+    url="https://raw.githubusercontent.com/formwork-io/iron/latest/overlay.sh"
     output=$(wget --quiet --content-disposition "$url" -O - | bash 2>&1)
     if [ $? -ne 0 ]; then
         echo "FAIL"

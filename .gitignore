@@ -1,7 +1,7 @@
 npm-debug.log
 
-# ignore the go shell
-/go.sh
-/.gosh.sh
+# ignore the fe shell
+/fe.sh
+/.fe.sh
 /env.sh
-scripts/go.sh
+scripts/fe.sh

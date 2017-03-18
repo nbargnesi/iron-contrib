@@ -1,5 +1,5 @@
-# gosh-contrib: ruby.sh
-# https://github.com/formwork-io/gosh-contrib
+# iron-contrib: ruby.sh
+# https://github.com/formwork-io/iron-contrib
 #
 # Copyright (c) 2015 Nick Bargnesi
 #
@@ -27,23 +27,23 @@
 
 # This contrib uses the following env vars:
 #
-# GOSH_CONTRIB_RUBY_GEMFILE
+# IRON_CONTRIB_RUBY_GEMFILE
 #   Path to Gemfile, e.g., $DIR/Gemfile.
 #
-# GOSH_CONTRIB_RUBY_GEMPATH
+# IRON_CONTRIB_RUBY_GEMPATH
 #   Path to install gems to, e.g., $DIR/gems.
 #
 
-# Installs gems into the GOSH_CONTRIB_RUBY_GEMPATH using the Gemfile in
-# GOSH_CONTRIB_RUBY_GEMFILE.
+# Installs gems into the IRON_CONTRIB_RUBY_GEMPATH using the Gemfile in
+# IRON_CONTRIB_RUBY_GEMFILE.
 # E.g.,
 #    bundle_install_gems
 function bundle_install_gems {
-    assert-env GOSH_CONTRIB_RUBY_GEMFILE || return 1
-    assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMFILE || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMPATH || return 1
     vdefault BUNDLE_OPTS "--quiet"
     echo -en "Running bundle install... "
-    local bundler="$GOSH_CONTRIB_RUBY_GEMPATH"/bin/bundler
+    local bundler="$IRON_CONTRIB_RUBY_GEMPATH"/bin/bundler
     if [ ! -x "$bundler" ]; then
         echo "failed"
         echo "$bundler: command not found" >&2
@@ -51,9 +51,9 @@ function bundle_install_gems {
     fi
     # shellcheck disable=SC2086
     if ! bundle install $BUNDLE_OPTS \
-                --gemfile="$GOSH_CONTRIB_RUBY_GEMFILE" \
-                --path="$GOSH_CONTRIB_RUBY_GEMPATH" \
-                --binstubs="$GOSH_CONTRIB_RUBY_GEMPATH"/bin; then
+                --gemfile="$IRON_CONTRIB_RUBY_GEMFILE" \
+                --path="$IRON_CONTRIB_RUBY_GEMPATH" \
+                --binstubs="$IRON_CONTRIB_RUBY_GEMPATH"/bin; then
         echo "failed"
         return 1
     fi
@@ -61,16 +61,16 @@ function bundle_install_gems {
     return 0
 }
 
-# Installs bundler into the GOSH_CONTRIB_RUBY_GEMPATH.
+# Installs bundler into the IRON_CONTRIB_RUBY_GEMPATH.
 # E.g.,
 #     gem_install_bundler
 function gem_install_bundler {
-    assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMPATH || return 1
     require-cmd "gem" || return 1
     echo -en "Running gem install bundler... "
     # redirect stdout/stderr to make gem really quiet
     GEM_OUTPUT=$(mktemp) || return 1
-    GEM_HOME="$GOSH_CONTRIB_RUBY_GEMPATH" gem install bundler >"$GEM_OUTPUT" 2>&1
+    GEM_HOME="$IRON_CONTRIB_RUBY_GEMPATH" gem install bundler >"$GEM_OUTPUT" 2>&1
     EC=$?
     if [ $EC -ne 0 ]; then
         echo "failed"
@@ -83,51 +83,51 @@ function gem_install_bundler {
     return 0
 }
 
-# Determines whether the gem path GOSH_CONTRIB_RUBY_GEMPATH needs updating.
+# Determines whether the gem path IRON_CONTRIB_RUBY_GEMPATH needs updating.
 # E.g.,
 #    if $(gem_path_needs_updating); then
 #        # update it
 #    fi
 function gem_path_needs_updating {
     # returning 0 indicates an update is needed
-    assert-env GOSH_CONTRIB_RUBY_GEMFILE || return 0
-    assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 0
+    assert-env IRON_CONTRIB_RUBY_GEMFILE || return 0
+    assert-env IRON_CONTRIB_RUBY_GEMPATH || return 0
     # gem path doesn't exist?
-    if [ ! -d "$GOSH_CONTRIB_RUBY_GEMPATH" ]; then return 0; fi
+    if [ ! -d "$IRON_CONTRIB_RUBY_GEMPATH" ]; then return 0; fi
     # gemfile changed?
-    if [ "$GOSH_CONTRIB_RUBY_GEMFILE" -nt "$GOSH_CONTRIB_RUBY_GEMPATH" ]; then
+    if [ "$IRON_CONTRIB_RUBY_GEMFILE" -nt "$IRON_CONTRIB_RUBY_GEMPATH" ]; then
         return 0
     fi
     # previous gem path creation failed?
-    if [ ! -f "$GOSH_CONTRIB_RUBY_GEMPATH"/.ts ]; then return 0; fi
+    if [ ! -f "$IRON_CONTRIB_RUBY_GEMPATH"/.ts ]; then return 0; fi
     return 1
 }
 
-# Marks the gem path GOSH_CONTRIB_RUBY_GEMPATH as complete. Call this function
+# Marks the gem path IRON_CONTRIB_RUBY_GEMPATH as complete. Call this function
 # once a gem path has been configured and all of the necessary dependencies
 # have been installed.
 function complete_gem_path {
-    assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 1
-    date > "$GOSH_CONTRIB_RUBY_GEMPATH"/.ts || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMPATH || return 1
+    date > "$IRON_CONTRIB_RUBY_GEMPATH"/.ts || return 1
     return 0
 }
 
 # Creates a gem path.
-# This function needs GOSH_CONTRIB_RUBY_GEMFILE and GOSH_CONTRIB_RUBY_GEMPATH
+# This function needs IRON_CONTRIB_RUBY_GEMFILE and IRON_CONTRIB_RUBY_GEMPATH
 # set.
 function create_gem_path {
-    assert-env GOSH_CONTRIB_RUBY_GEMFILE || return 1
-    assert-env GOSH_CONTRIB_RUBY_GEMPATH || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMFILE || return 1
+    assert-env IRON_CONTRIB_RUBY_GEMPATH || return 1
     if gem_path_needs_updating; then
         echo "Gem path out-of-date - it will be created."
-        echo "($GOSH_CONTRIB_RUBY_GEMPATH)"
-        rm -fr "$GOSH_CONTRIB_RUBY_GEMPATH"
+        echo "($IRON_CONTRIB_RUBY_GEMPATH)"
+        rm -fr "$IRON_CONTRIB_RUBY_GEMPATH"
         gem_install_bundler || exit 1
         bundle_install_gems || exit 1
         complete_gem_path || exit 1
         echo
     fi
 
-    local binpath="$GOSH_CONTRIB_RUBY_GEMPATH/bin":$PATH
+    local binpath="$IRON_CONTRIB_RUBY_GEMPATH/bin":$PATH
     _g_add_path "$binpath"
 }

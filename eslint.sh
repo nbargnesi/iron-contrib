@@ -1,5 +1,5 @@
-# gosh-contrib: eslint.sh
-# https://github.com/formwork-io/gosh-contrib
+# iron-contrib: eslint.sh
+# https://github.com/formwork-io/iron-contrib
 #
 # Copyright (c) 2015 Nick Bargnesi
 #
@@ -27,10 +27,10 @@
 
 # This contrib uses the following env vars:
 #
-# GOSH_CONTRIB_ESLINT_VERSION
+# IRON_CONTRIB_ESLINT_VERSION
 #   Specific version of eslint to use (optional).
 #
-# GOSH_CONTRIB_ESLINT_NPM_MODPATH
+# IRON_CONTRIB_ESLINT_NPM_MODPATH
 #   Path to eslint-specific node_modules directory, e.g., $DIR.
 #
 
@@ -43,7 +43,7 @@ function install_eslint {
     # redirect stdout/stderr to mimic silent behavior
     # (npm currently lacks this functionality as of 2014-10-20)
     NODE_OUTPUT=$(mktemp) || return 1
-    local version=GOSH_CONTRIB_ESLINT_VERSION
+    local version=IRON_CONTRIB_ESLINT_VERSION
     if [ ! -z "${!version}" ]; then
         npm install eslint@"${!version}" >"$NODE_OUTPUT" 2>&1
         EC=$?
@@ -69,10 +69,10 @@ function install_eslint {
 #    fi
 function eslint_env_needs_update {
     # returning 0 indicates an update is needed
-    assert-env GOSH_CONTRIB_ESLINT_NPM_MODPATH || return 0
+    assert-env IRON_CONTRIB_ESLINT_NPM_MODPATH || return 0
 
     # E.g., $DIR -> $DIR/node_modules
-    local nm_dir="$GOSH_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
+    local nm_dir="$IRON_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
 
     # directory doesn't exist?
     if [ ! -d "$nm_dir" ]; then return 0; fi
@@ -81,33 +81,33 @@ function eslint_env_needs_update {
     return 1
 }
 
-# Marks the eslint environment GOSH_CONTRIB_ESLINT_NPM_MODPATH as complete.
+# Marks the eslint environment IRON_CONTRIB_ESLINT_NPM_MODPATH as complete.
 # Call this function once a node envrionment has been configured and all of the
 # necessary dependencies have been installed.
 function complete_eslint_env {
-    assert-env GOSH_CONTRIB_ESLINT_NPM_MODPATH || return 1
+    assert-env IRON_CONTRIB_ESLINT_NPM_MODPATH || return 1
     # E.g., $DIR -> $DIR/node_modules
-    local nm_dir="$GOSH_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
+    local nm_dir="$IRON_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
     date > "$nm_dir"/.ts || return 1
     return 0
 }
 
 # Creates an eslint environment using npm.
-# This function needs GOSH_CONTRIB_ESLINT_NPM_MODPATH set.
+# This function needs IRON_CONTRIB_ESLINT_NPM_MODPATH set.
 function create_eslint_env {
-    assert-env GOSH_CONTRIB_ESLINT_NPM_MODPATH || exit 1
+    assert-env IRON_CONTRIB_ESLINT_NPM_MODPATH || exit 1
     if eslint_env_needs_update; then
         echo "ESLint environment out-of-date - it will be created."
-        echo "($GOSH_CONTRIB_ESLINT_NPM_MODPATH)"
+        echo "($IRON_CONTRIB_ESLINT_NPM_MODPATH)"
         # E.g., $DIR -> $DIR/node_modules
-        local nm_dir="$GOSH_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
+        local nm_dir="$IRON_CONTRIB_ESLINT_NPM_MODPATH"/node_modules
         rm -fr "$nm_dir"
         install_eslint || exit 1
         complete_eslint_env || exit 1
         echo
     fi
 
-    local binpath="$GOSH_CONTRIB_ESLINT_NPM_MODPATH/node_modules/.bin"
+    local binpath="$IRON_CONTRIB_ESLINT_NPM_MODPATH/node_modules/.bin"
     _g_add_path "$binpath"
 }
 

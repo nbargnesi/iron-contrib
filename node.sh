@@ -1,5 +1,5 @@
-# gosh-contrib: node.sh
-# https://github.com/formwork-io/gosh-contrib
+# iron-contrib: node.sh
+# https://github.com/formwork-io/iron-contrib
 #
 # Copyright (c) 2015 Nick Bargnesi
 #
@@ -27,10 +27,10 @@
 
 # This contrib uses the following env vars:
 #
-# GOSH_CONTRIB_NODE_NPM_MODPATH
+# IRON_CONTRIB_NODE_NPM_MODPATH
 #   Path to node_modules directory, e.g., $DIR.
 #
-# GOSH_CONTRIB_NODE_NPM_PKGJSON
+# IRON_CONTRIB_NODE_NPM_PKGJSON
 #   Path to package.json, e.g., $DIR/package.json.
 #
 
@@ -64,50 +64,50 @@ function install_node_deps {
 #    fi
 function node_env_needs_update {
     # returning 0 indicates an update is needed
-    assert-env GOSH_CONTRIB_NODE_NPM_MODPATH || return 0
-    assert-env GOSH_CONTRIB_NODE_NPM_PKGJSON || return 0
+    assert-env IRON_CONTRIB_NODE_NPM_MODPATH || return 0
+    assert-env IRON_CONTRIB_NODE_NPM_PKGJSON || return 0
 
     # E.g., $DIR -> $DIR/node_modules
-    local nm_dir="$GOSH_CONTRIB_NODE_NPM_MODPATH"/node_modules
+    local nm_dir="$IRON_CONTRIB_NODE_NPM_MODPATH"/node_modules
 
     # directory doesn't exist?
     if [ ! -d "$nm_dir" ]; then return 0; fi
     # package.json has changed?
-    if [ "$GOSH_CONTRIB_NODE_NPM_PKGJSON" -nt "$nm_dir" ]; then return 0; fi
+    if [ "$IRON_CONTRIB_NODE_NPM_PKGJSON" -nt "$nm_dir" ]; then return 0; fi
     # previous npm install failed?
     if [ ! -f "$nm_dir"/.ts ]; then return 0; fi
     return 1
 }
 
-# Marks the node environment GOSH_CONTRIB_NODE_NPM_MODPATH as complete. Call
+# Marks the node environment IRON_CONTRIB_NODE_NPM_MODPATH as complete. Call
 # this function once a node envrionment has been configured and all of the
 # necessary dependencies have been installed.
 function complete_node_env {
-    assert-env GOSH_CONTRIB_NODE_NPM_MODPATH || return 1
+    assert-env IRON_CONTRIB_NODE_NPM_MODPATH || return 1
     # E.g., $DIR -> $DIR/node_modules
-    local nm_dir="$GOSH_CONTRIB_NODE_NPM_MODPATH"/node_modules
+    local nm_dir="$IRON_CONTRIB_NODE_NPM_MODPATH"/node_modules
     date > "$nm_dir"/.ts || return 1
     return 0
 }
 
 # Creates a node environment using npm.
-# This function needs GOSH_CONTRIB_NODE_NPM_MODPATH and
-# GOSH_CONTRIB_NODE_NPM_PKGJSON set.
+# This function needs IRON_CONTRIB_NODE_NPM_MODPATH and
+# IRON_CONTRIB_NODE_NPM_PKGJSON set.
 function create_node_env {
-    assert-env GOSH_CONTRIB_NODE_NPM_MODPATH || exit 1
-    assert-env GOSH_CONTRIB_NODE_NPM_PKGJSON || exit 1
+    assert-env IRON_CONTRIB_NODE_NPM_MODPATH || exit 1
+    assert-env IRON_CONTRIB_NODE_NPM_PKGJSON || exit 1
     if node_env_needs_update; then
         echo "Node environment out-of-date - it will be created."
-        echo "($GOSH_CONTRIB_NODE_NPM_MODPATH)"
+        echo "($IRON_CONTRIB_NODE_NPM_MODPATH)"
         # E.g., $DIR -> $DIR/node_modules
-        local nm_dir="$GOSH_CONTRIB_NODE_NPM_MODPATH"/node_modules
+        local nm_dir="$IRON_CONTRIB_NODE_NPM_MODPATH"/node_modules
         rm -fr "$nm_dir"
         install_node_deps || exit 1
         complete_node_env || exit 1
         echo
     fi
 
-    local binpath="$GOSH_CONTRIB_NODE_NPM_MODPATH/node_modules/.bin"
+    local binpath="$IRON_CONTRIB_NODE_NPM_MODPATH/node_modules/.bin"
     _g_add_path "$binpath"
 }
 
